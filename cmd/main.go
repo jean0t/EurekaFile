@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	
 	"github.com/JMFern01/EurekaFile/internal/router"
-	"github.com/JMFern01/EurekaFile/internal/logging"
+	"github.com/JMFern01/EurekaFile/internal/middleware"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 		fmt.Println("[*] Starting Server...")
 		go func() {
 			var Router = router.GetRouter()
-			var loggedRouter http.Handler = logging.LoggingMiddleware(Router)
+			var loggedRouter http.Handler = middleware.LoggingMiddleware(Router)
 
 			err := http.ListenAndServe(":8000", loggedRouter)
 			if err != nil {
