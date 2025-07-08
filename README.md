@@ -43,7 +43,7 @@ internal
 1. **Clone the repository:**
     ```sh
     git clone github.com/jean0t/EurekaFile # or user JMFern01
-    cd eurekafile
+    cd EurekaFile
     ```
 
 2. **Build and run:**
