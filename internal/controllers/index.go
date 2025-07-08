@@ -8,7 +8,7 @@ import (
 
 func Index(w http.ResponseWriter, r *http.Request) {
 	var templ = template.Must(template.ParseFiles(
-		filepath.Join("views", "login.tmpl"),
+		filepath.Join("internal", "views", "login.tmpl"),
 	))
 
 	templ.ExecuteTemplate(w, "Login", nil)
