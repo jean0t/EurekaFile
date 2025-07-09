@@ -13,7 +13,7 @@ import (
 
 func main() {
 	var startServer *bool = flag.Bool("s", false, "Starts the server")
-    var portServer *int = flag.Int("p", 8000, "Port to link the server")
+    	var portServer *int = flag.Int("p", 8000, "Port to link the server")
 	flag.Parse()
 
 	if *startServer {
@@ -27,11 +27,11 @@ func main() {
 
 			err := http.ListenAndServe(fmt.Sprintf(":%d", *portServer), loggedRouter)
 			if err != nil {
-				fmt.Println("Error while starting the server")
+				fmt.Println("[!] Error while starting the server")
 			}
 		}()
 		fmt.Println("[*] Server Started.")
-        fmt.Printf("[*] You can access the server in http://localhost:%d/\n", *portServer)
+        	fmt.Printf("[*] You can access the server in http://localhost:%d/\n", *portServer)
 
 		<-sigChan
 		fmt.Println("\n[*] Closing Server.")
