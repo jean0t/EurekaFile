@@ -1,15 +1,21 @@
 package database
 
 import (
-	"time"
 	"gorm.io/gorm"
 )
 
 type User struct {
 	gorm.Model
-	Id int
-	Name string
-	Author string
-	CreatedAt time.Time
+	Username	string	`gorm:"unique;not null"`
+	PasswordHash	string	`gorm:"not null"`
+	Files		[]File	`gorm:"constraint:OnDelete:CASCADE"`
 }
+
+type File struct {
+	gorm.Model
+	Name	string
+	UserID	uint
+	Author	User
+}
+
 
