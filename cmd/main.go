@@ -7,8 +7,8 @@ import (
 	"os"
 	"os/signal"
 	
-	"github.com/JMFern01/EurekaFile/internal/router"
-	"github.com/JMFern01/EurekaFile/internal/middleware"
+	"github.com/jean0t/EurekaFile/internal/router"
+	"github.com/jean0t/EurekaFile/internal/middleware"
 )
 
 func main() {
