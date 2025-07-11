@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"github.com/JMFern01/EurekaFile/internal/controllers"
+	"github.com/jean0t/EurekaFile/internal/controllers"
 )
 
 func GetRouter() *http.ServeMux {
