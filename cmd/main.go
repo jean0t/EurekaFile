@@ -23,6 +23,7 @@ func main() {
 
 	
 	if *migration {
+		fmt.Println("[*] Starting migration")
 		var db *gorm.DB = database.ConnectToDB()
 		database.MigrateDB(db)
 		return
