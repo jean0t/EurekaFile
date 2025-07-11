@@ -9,12 +9,13 @@ import (
 	
 	"github.com/jean0t/EurekaFile/internal/router"
 	"github.com/jean0t/EurekaFile/internal/middleware"
+	"github.com/jean0t/EurekaFile/internal/database"
 )
 
 func main() {
 
 	// if migration is run, it will only execute its function and exits
-	var MigrateDatabase *bool = flag.Bool("M", false, "Migrate the Database Models")
+	var migrate *bool = flag.Bool("M", false, "Migrate the Database Models")
 
 	// server flags
 	var startServer *bool = flag.Bool("s", false, "Starts the server")
@@ -22,9 +23,13 @@ func main() {
 	flag.Parse()
 
 	
-	if *migration {
+	if *migrate {
 		fmt.Println("[*] Starting migration")
-		var db *gorm.DB = database.ConnectToDB()
+		var db, err = database.ConnectToDB()
+		if err != nil {
+			fmt.Println("[!] Error connecting to database")
+			return
+		}
 		database.MigrateDB(db)
 		return
 	}
