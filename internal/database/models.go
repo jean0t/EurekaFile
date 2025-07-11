@@ -15,7 +15,7 @@ type File struct {
 	gorm.Model
 	Name	string
 	UserID	uint
-	Author	User
+	Author	User `gorm:"foreignKey:UserID"`
 }
 
 
