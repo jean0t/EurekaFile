@@ -12,9 +12,22 @@ import (
 )
 
 func main() {
+
+	// if migration is run, it will only execute its function and exits
+	var MigrateDatabase *bool = flag.Bool("M", false, "Migrate the Database Models")
+
+	// server flags
 	var startServer *bool = flag.Bool("s", false, "Starts the server")
     	var portServer *int = flag.Int("p", 8000, "Port to link the server")
 	flag.Parse()
+
+	
+	if *migration {
+		var db *gorm.DB = database.ConnectToDB()
+		database.MigrateDB(db)
+		return
+	}
+
 
 	if *startServer {
 		var sigChan chan os.Signal = make(chan os.Signal, 1)
