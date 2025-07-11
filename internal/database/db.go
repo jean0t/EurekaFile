@@ -3,8 +3,6 @@ package database
 import (
 	"fmt"
 	"os"
-	"hash"
-	"crypto/sha256"
 
 	"gorm.io/gorm"
 	"gorm.io/driver/postgres"
@@ -38,8 +36,8 @@ func ConnectToDB() (*gorm.DB, error) {
 	var db *gorm.DB
 	var err error
 	
-	var dsn string = createDsb()
-	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config())
+	var dsn string = createDsn()
+	db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 
 	return db, err
 }
@@ -56,12 +54,12 @@ func RegisterUser(db *gorm.DB, username, password string) error {
 		PasswordHash: passwordHashed,
 	}
 
-	result = db.Create(&user} 
+	var result = db.Create(&user) 
 	return result.Error
 }
 
 
-func IsValidUser(db *gorm.DB, username, password string) (string, error) {
+func IsValidUser(db *gorm.DB, username, password string) error {
 	var user User
 	var passwordHashed string = HashPassword(password)
 
@@ -78,9 +76,9 @@ func IsValidUser(db *gorm.DB, username, password string) (string, error) {
 }
 
 
-func RegisterFile(db *gorm.DB, user User, name string) error (
+func RegisterFile(db *gorm.DB, user User, name string) error {
 	var file File = File{Name: name, UserID: user.ID, Author: user}
 
-	result = db.Create(&file)
+	var result = db.Create(&file)
 	return result.Error
-)
+}
