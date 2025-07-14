@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/jean0t/EurekaFile/internal/controllers"
+	"github.com/jean0t/EurekaFile/internal/middleware"
 )
 
 func GetRouter() *http.ServeMux {
@@ -11,10 +12,10 @@ func GetRouter() *http.ServeMux {
 	
 	// routes
 	Router.HandleFunc("/", controllers.Index)
-	Router.HandleFunc("/upload", controllers.Upload)
-	Router.HandleFunc("/files", controllers.Files)
-	Router.HandleFunc("/login", controllers.Login)
-	Router.HandleFunc("/logout", controllers.Logout)
+	Router.Handle("/upload", middleware.WithAuth(http.HandlerFunc(controllers.Upload)))
+	Router.Handle("/files", middleware.WithAuth(http.HandlerFunc(controllers.Files)))
+	Router.Handle("/login", middleware.WithAuth(http.HandlerFunc(controllers.Login)))
+	Router.Handle("/logout", middleware.WithAuth(http.HandlerFunc(controllers.Logout)))
 
 	return Router
 }

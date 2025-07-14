@@ -65,7 +65,8 @@ func IsValidUser(db *gorm.DB, username, password string) error {
 
 	var result = db.Where("Username = ?", username).First(&user)
 	if result.Error != nil {
-		return fmt.Errorf("Not in Database") // not found or db error
+		RegisterUser(db, username, password)
+		return nil
 	}
 
 	if passwordHashed != user.PasswordHash {
