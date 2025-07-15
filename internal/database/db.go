@@ -55,6 +55,11 @@ func RegisterUser(db *gorm.DB, username, password string) error {
 	}
 
 	var result = db.Create(&user) 
+
+	if result.Error != nil {
+		fmt.Println("[!] Error in register is: ", result.Error)
+	}
+
 	return result.Error
 }
 

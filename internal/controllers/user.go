@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 	"time"
+	"fmt"
 
 	"github.com/jean0t/EurekaFile/internal/auth"
 	"github.com/jean0t/EurekaFile/internal/database"
@@ -13,18 +14,25 @@ import (
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	var err error
-	var username string = r.FormValue("username")
-	var password string = r.FormValue("password")
+	var username string = strings.TrimSpace(r.FormValue("username"))
+	var password string = strings.TrimSpace(r.FormValue("password"))
 	var db *gorm.DB
 
-	db, err= database.ConnectToDB()
-	if err != nil {
+	if username == "" || password == "" {
 		http.Redirect(w, r, "/", http.StatusUnauthorized)
 		return
 	}
 
-	err = database.IsValidUser(db, username, strings.TrimSpace(password))
+	db, err= database.ConnectToDB()
 	if err != nil {
+		fmt.Println("Error connecting to DB")
+		http.Redirect(w, r, "/", http.StatusUnauthorized)
+		return
+	}
+
+	err = database.IsValidUser(db, username, password)
+	if err != nil {
+		fmt.Println("Error validating user")
 		http.Redirect(w, r, "/", http.StatusUnauthorized)
 		return
 	}
@@ -42,7 +50,6 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	})
 
 	http.Redirect(w, r, "/upload", http.StatusSeeOther)
-	return
 }
 
 func Logout(w http.ResponseWriter, r *http.Request) {
@@ -50,8 +57,9 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 		Name: "auth",
 		Value: "",
 		Path: "/",
-		Expires: time.Unix(0, 0),
 		HttpOnly: true,
+		Secure: true,
+		Expires: time.Unix(0, 0),
 	})
 
 	http.Redirect(w, r, "/", http.StatusSeeOther)
