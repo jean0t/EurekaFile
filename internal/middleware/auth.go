@@ -18,8 +18,13 @@ func WithAuth(next http.Handler) http.Handler {
 	var jwtKey []byte = []byte(os.Getenv("JWT_SECRET"))
 
 	return http.HandlerFunc(func (w http.ResponseWriter, r *http.Request) {
-		cookie, err := r.Cookie("auth")
-		if err != nil {
+		var (
+			cookie *http.Cookie
+			err error
+		)
+
+		cookie, err = r.Cookie("auth")
+		if err != nil || cookie.Value == "" {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
 		}
