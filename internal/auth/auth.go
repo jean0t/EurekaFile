@@ -3,14 +3,21 @@ package auth
 import (
 	"time"
 	"os"
+	"net/http"
 
 	"github.com/golang-jwt/jwt/v5"
 )
+
+
+type contextKey string
+const UserContextKey = contextKey("user")
+
 
 type Claims struct {
 	Username string `json:"username"`
 	jwt.RegisteredClaims
 }
+
 
 func CreateToken(username string, expiration time.Time) string {
 	var signedToken string
@@ -29,4 +36,19 @@ func CreateToken(username string, expiration time.Time) string {
 	}
 
 	return signedToken
+}
+
+
+func GetUser(r *http.Request) *Claims {
+	var (
+		claims *Claims
+		ok bool
+	)
+
+	claims, ok = r.Context().Value(UserContextKey).(*Claims)
+	if !ok {
+		return nil
+	}
+
+	return claims
 }
