@@ -10,7 +10,7 @@ func GetAllFiles(db *gorm.DB) ([]File, error) {
 		err error
 	)
 
-	err = db.Find(&files).Error
+	err = db.Preload("Author").Find(&files).Error
 	if err != nil {
 		return []File{}, err
 	}
