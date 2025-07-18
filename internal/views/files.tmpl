@@ -33,8 +33,8 @@
                         {{ range .Files }}
                         <tr>
                             <td>{{ .Name }}</td>
-                            <td>{{ .Author }}</td>
-                            <td>{{ .CreatedAt }}</td>
+                            <td>{{ .Author.Username }}</td>
+                            <td>{{ .CreatedAt | formatDate }}</td>
                             <td>
                                 <a class="btn btn-primary btn-sm" href="/files/{{ .ID }}" download>
                                     Download
