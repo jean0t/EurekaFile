@@ -21,6 +21,9 @@
             <div class="col-md-6">
                 <div class="card p-4 shadow">
                     <h2 class="mb-3 text-center">Upload a File</h2>
+			{{if not (eq .Message "")}}
+			<p>{{.Message}}</p>
+			{{end}}
                     <form method="POST" action="/upload" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="file" class="form-label">Select file</label>

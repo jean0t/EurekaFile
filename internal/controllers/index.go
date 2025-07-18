@@ -11,5 +11,5 @@ func Index(w http.ResponseWriter, r *http.Request) {
 		filepath.Join("internal", "views", "login.tmpl"),
 	))
 
-	templ.ExecuteTemplate(w, "Login", nil)
+	_ = templ.ExecuteTemplate(w, "Login", nil)
 }

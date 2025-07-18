@@ -6,13 +6,9 @@ import (
 	"context"
 
 	"github.com/jean0t/EurekaFile/internal/auth"
-
 	"github.com/golang-jwt/jwt/v5"
 )
 
-type contextKey string
-
-const userContextKey = contextKey("user")
 
 func WithAuth(next http.Handler) http.Handler {
 	var jwtKey []byte = []byte(os.Getenv("JWT_SECRET"))
@@ -41,17 +37,7 @@ func WithAuth(next http.Handler) http.Handler {
 			return
 		}
 
-		var ctx context.Context = context.WithValue(r.Context(), userContextKey, claims)
+		var ctx context.Context = context.WithValue(r.Context(), auth.UserContextKey, claims)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
-}
-
-
-func GetUser(r *http.Request) *auth.Claims {
-	claims, ok := r.Context().Value(userContextKey).(*auth.Claims)
-	if !ok {
-		return nil
-	}
-
-	return claims
 }
