@@ -5,6 +5,7 @@ import (
 	"os"
 	"io"
 	"time"
+	"strings"
 	"net/http"
 	"html/template"
 	"path/filepath"
@@ -157,4 +158,38 @@ func Upload(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("[!] Error executing template for /upload")
 	}
+}
+
+
+func DownloadFile(w http.ResponseWriter, r *http.Request) {
+	var (
+		err error
+		fileName string
+		filePath string
+		filesDir string = "./uploaded_files"
+	)
+
+	fileName = strings.TrimPrefix(r.URL.Path, "/files/")
+	if fileName == "" {
+		http.Redirect(w, r, "/files", http.StatusSeeOther)
+		return
+	}
+
+	fileName = filepath.Clean(fileName)
+	if strings.Contains(fileName, "..") {
+		http.Error(w, "Invalid File Name", http.StatusBadRequest)
+		return
+	}
+
+	filePath = filepath.Join(filesDir, fileName)
+	if _, err = os.Stat(filePath); err != nil {
+		http.NotFound(w, r)
+		return
+	}
+
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s\"", fileName))
+	w.Header().Set("Content-Type", "application/octet-stream")
+	http.ServeFile(w, r, filePath)
+	http.Redirect(w, r, "/files", http.StatusSeeOther)
+
 }
