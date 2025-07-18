@@ -23,6 +23,13 @@ func RegisterUser(db *gorm.DB, username, password string) error {
 }
 
 
+func QueryUser(db *gorm.DB, username string) (User, error) {
+	var user User
+
+	var result = db.Where("username = ?", username).First(&user)
+	return user, result.Error
+}
+
 func IsValidUser(db *gorm.DB, username, password string) error {
 	var user User
 	var passwordHashed string = HashPassword(password)
