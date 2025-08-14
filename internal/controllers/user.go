@@ -35,7 +35,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	err = database.IsValidUser(db, username, password)
 	if err != nil {
 		fmt.Println("Error validating user")
-		http.Error(w, "<h1>Failed to authenticate</h1>", http.StatusUnauthorized)
+		w.WriteHeader(http.StatusForbidden)
+		w.Header().Set("Content-Type", "text/html")
+		fmt.Fprintf(w, "<h1>Failed to authenticate</h1>")
 		return
 	}
 	
@@ -43,11 +45,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	var signedToken string = auth.CreateToken(username, expiration)
 
 	http.SetCookie(w, &http.Cookie {
-		Name: "auth",
+		Name: "Authentication",
 		Value: signedToken,
 		Path: "/",
 		HttpOnly: true,
-		Secure: true,
 		Expires: expiration,
 	})
 
@@ -56,11 +57,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 func Logout(w http.ResponseWriter, r *http.Request) {
 	http.SetCookie(w, &http.Cookie{
-		Name: "auth",
+		Name: "Authentication",
 		Value: "",
 		Path: "/",
 		HttpOnly: true,
-		Secure: true,
 		Expires: time.Unix(0, 0),
 	})
 
