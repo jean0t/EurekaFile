@@ -34,13 +34,24 @@ type FilesViewData struct {
 	Files []database.File
 }
 
+func DownloadFile(w http.ResponseWriter, r *http.Request) {
+    filePath := filepath.Join("./uploaded_files", filepath.Base(r.URL.Path))
+    w.Header().Set("Content-Disposition", "attachment; filename="+filepath.Base(filePath))
+    http.ServeFile(w, r, filePath)
+}
+
+
 func Files(w http.ResponseWriter, r *http.Request) {
 	var (
 		err error
 		db *gorm.DB
 		files []database.File
 		data FilesViewData
+		filesDir string = "./uploaded_files"
+		fs http.Handler = http.FileServer(http.Dir(filesDir))
 	)
+
+	http.Handle("/files/", http.StripPrefix("/files", fs))
 
 	db, err = database.ConnectToDB()
 	if err != nil {
@@ -63,6 +74,7 @@ func Files(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "<h1>Internal Server Error</h1>", http.StatusInternalServerError)
 		return
 	}
+
 }
 
 

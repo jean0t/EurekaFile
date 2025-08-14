@@ -19,7 +19,7 @@ func WithAuth(next http.Handler) http.Handler {
 			err error
 		)
 
-		cookie, err = r.Cookie("auth")
+		cookie, err = r.Cookie("Authentication")
 		if err != nil || cookie.Value == "" {
 			http.Redirect(w, r, "/", http.StatusSeeOther)
 			return
