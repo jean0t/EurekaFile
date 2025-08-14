@@ -35,7 +35,7 @@ func IsValidUser(db *gorm.DB, username, password string) error {
 	var passwordHashed string = HashPassword(password)
 
 	var result = db.Where("Username = ?", username).First(&user)
-	if result.Error != nil {
+	if  result.Error == gorm.ErrRecordNotFound {
 		RegisterUser(db, username, password) // if user doesnt exists, it is created :)
 		return nil
 	}
