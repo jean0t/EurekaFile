@@ -14,6 +14,7 @@ func GetRouter() *http.ServeMux {
 	Router.HandleFunc("/", controllers.Index)
 	Router.Handle("/upload", middleware.WithAuth(http.HandlerFunc(controllers.Upload)))
 	Router.Handle("/files", middleware.WithAuth(http.HandlerFunc(controllers.Files)))
+	Router.Handle("/files/", middleware.WithAuth(http.HandlerFunc(controllers.DownloadFile)))
 	Router.Handle("/login", http.HandlerFunc(controllers.Login))
 	Router.Handle("/logout", middleware.WithAuth(http.HandlerFunc(controllers.Logout)))
 
